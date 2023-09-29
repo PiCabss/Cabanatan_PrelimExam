@@ -54,9 +54,13 @@
      debug:
        msg: "Motd Content: {{ lookup('file', '/etc/motd') }}"
 
+   - name: Prompt for new username
+     pause:
+       prompt: "Enter the new username:"
+     register: username_prompt
+
    - name: Create a new user
      user:
-       name: "{{ new_username }}"
+       name: "{{ username_prompt.user_input }}"
        state: present
-     when: new_username is defined
-
+     when: username_prompt.user_input is defined and username_prompt.user_input != ""
